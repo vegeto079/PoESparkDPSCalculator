@@ -15,4 +15,5 @@ Path of Exile Spark DPS Calculator
 * Each Spark projectile in a single cast can only hit once every 0.66s. This is indicated by all of the projectiles within that cast turning Red whenever they hit.
 
 ## Examples
+![Gif of application running](https://i.imgur.com/RiPcg9a.gif)
 ![Picture of application](https://i.imgur.com/3YsKSww.png)
