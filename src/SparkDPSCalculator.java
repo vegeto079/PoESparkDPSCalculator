@@ -56,6 +56,7 @@ public class SparkDPSCalculator extends Game {
 	double avgDamagePerSecond = -1;
 	DecimalFormat decimalFormat = new DecimalFormat("#");
 	DecimalFormat decimalFormat2 = new DecimalFormat("#.#");
+	boolean shootNow = true;
 	
 	int sparkLoopPrevention = 50; // If a Spark hits a wall more than this many times, kill it. It's probably stuck in a wall
 
@@ -111,10 +112,12 @@ public class SparkDPSCalculator extends Game {
 			decimalFormat2.setGroupingSize(3);
 		}
 		badGuy = new BadGuy(badGuyPoint);
-		count++;
-		if (count >= MAX_COUNT) {
-			addSparks(proj);
-			count = 0;
+		if (shootNow) {
+			count++;
+			if (count >= MAX_COUNT) {
+				addSparks(proj);
+				count = 0;
+			}
 		}
 		synchronized (sparks) {
 			for (int i = 0; i < sparks.size(); i++) {
@@ -180,9 +183,11 @@ public class SparkDPSCalculator extends Game {
 
 	@Override
 	public void mouseDragged(int x, int y, int button, int xOrigin, int yOrigin) {
-		if (button == 1)
+		if (button == 1) // Left Click
 			mouseAction(x, y);
-		else
+		else if (button == 2)
+			shootNow = !shootNow;
+		else if (button == 3) // Right click
 			badGuyPoint = new Point(x, y);
 	}
 
@@ -197,9 +202,11 @@ public class SparkDPSCalculator extends Game {
 
 	@Override
 	public void mousePressed(int x, int y, int button) {
-		if (button == 1)
+		if (button == 1) // Left Click
 			mouseAction(x, y);
-		else
+		else if (button == 2)
+			shootNow = !shootNow;
+		else if (button == 3) // Right click
 			badGuyPoint = new Point(x, y);
 	}
 
