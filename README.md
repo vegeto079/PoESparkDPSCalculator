@@ -19,3 +19,7 @@ It is notoriously difficult to calculate Spark's actual DPS and hits-per-second.
 ## Examples
 ![Gif of application running](https://i.imgur.com/RiPcg9a.gif)
 ![Picture of application](https://i.imgur.com/3YsKSww.png)
+
+Go Crazy!
+
+![Picture of application with settings turned up](https://i.imgur.com/3h8cqgz.png)
