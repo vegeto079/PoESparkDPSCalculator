@@ -58,7 +58,8 @@ public class SparkDPSCalculator extends Game {
 	DecimalFormat decimalFormat2 = new DecimalFormat("#.#");
 	boolean shootNow = true;
 	
-	int sparkLoopPrevention = 50; // If a Spark hits a wall more than this many times, kill it. It's probably stuck in a wall
+	final int sparkLoopPrevention = 50; // If a Spark hits a wall more than this many times, kill it. It's probably stuck in a wall
+	final long sparkHitTimeout = 660; // If a Spark hits an enemy, all Sparks in that cast cannot hit for 0.66s
 
 	class Hit {
 		long time = System.currentTimeMillis();
@@ -237,7 +238,7 @@ public class SparkDPSCalculator extends Game {
 		}
 
 		boolean canHit() {
-			return lastHit + 600 <= System.currentTimeMillis();
+			return lastHit + sparkHitTimeout <= System.currentTimeMillis();
 		}
 
 		void hit(double damage) {
