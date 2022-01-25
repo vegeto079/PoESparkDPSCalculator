@@ -55,6 +55,8 @@ public class SparkDPSCalculator extends Game {
 	double avgDamagePerSecond = -1;
 	DecimalFormat decimalFormat = new DecimalFormat("#");
 	DecimalFormat decimalFormat2 = new DecimalFormat("#.#");
+	
+	int sparkLoopPrevention = 50; // If a Spark hits a wall more than this many times, kill it. It's probably stuck in a wall
 
 	class Hit {
 		long time = System.currentTimeMillis();
@@ -271,7 +273,7 @@ public class SparkDPSCalculator extends Game {
 		boolean tick(int loopPrevention) {
 			if (System.currentTimeMillis() >= parent.death)
 				return false;
-			else if (loopPrevention > 50)
+			else if (loopPrevention > sparkLoopPrevention)
 				return false;
 			else if (pierceLeft < 0 && forkLeft == 0)
 				return false;
