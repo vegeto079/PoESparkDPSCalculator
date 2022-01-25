@@ -23,6 +23,8 @@ public class SparkDPSCalculator extends Game {
 	
 	double sparkSpeed = 4.2; // How many pixels the Spark moves per-tick. I set this arbitrarily
 	double sparkSize = 25;
+	
+	long timeToAverageBy = 6000;
 	// ****************
 
 	public SparkDPSCalculator(Logger logger, String[] args, int ticksPerSecond, int paintTicksPerSecond, String title,
@@ -48,7 +50,6 @@ public class SparkDPSCalculator extends Game {
 	Point badGuyPoint = new Point(600, 600);
 
 	long start = System.currentTimeMillis();
-	long timeToAverageBy = 6000;
 	ArrayList<Hit> hits = new ArrayList<Hit>();
 	double avgHitsPerSecond = -1;
 	double avgDamagePerSecond = -1;
@@ -87,8 +88,10 @@ public class SparkDPSCalculator extends Game {
 			if (done < 0) {
 				start = System.currentTimeMillis();
 			}
-			g.drawString("time left: " + done + ", fps: " + this.getFps() + ", ups: " + this.getUps(), 25, y += 20);
+			g.drawString("time left (for averaging): " + done + ", fps: " + this.getFps() + ", ups: " + this.getUps(), 25, y += 20);
+			g.drawString("castRate: " + castRate + ", projectiles: " + proj, 25, y += 40);
 			g.drawString("pierce: " + pierce + ", fork: " + fork, 25, y += 20);
+			g.drawString("duration: " + duration, 25, y += 20);
 		}
 	}
 
