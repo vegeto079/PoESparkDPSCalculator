@@ -1,5 +1,5 @@
-# PoESparkDPSCalculator
-Path of Exile Spark DPS Calculator
+# Path of Exile Spark DPS Calculator
+It is notoriously difficult to calculate Spark's actual DPS and hits-per-second. The best way I could figure out how to do it was to emulate it to get some close-to-real-world results.
 
 ## Deployment
 1. Download and compile [ng-commontools](https://github.com/vegeto079/ng-commontools)
