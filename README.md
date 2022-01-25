@@ -10,6 +10,7 @@ It is notoriously difficult to calculate Spark's actual DPS and hits-per-second.
 ## Controls
 * Left click anywhere to move where you are standing.
 * Right click anywhere to move where the enemy is standing.
+* Middle click to enable/disable casting
 
 ## Notes
 * Each Spark projectile in a single cast can only hit once every 0.66s. This is indicated by all of the projectiles within that cast turning Red whenever they hit.
