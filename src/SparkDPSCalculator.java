@@ -25,6 +25,7 @@ public class SparkDPSCalculator extends Game {
 	double sparkSize = 25;
 	
 	long timeToAverageBy = 6000;
+	MapArea.Map selectedMap = MapArea.Map.ORIATH_DOCKS; // ORIATH_DOCKS, SQUARE
 	// ****************
 
 	public SparkDPSCalculator(Logger logger, String[] args, int ticksPerSecond, int paintTicksPerSecond, String title,
@@ -102,7 +103,7 @@ public class SparkDPSCalculator extends Game {
 		super.gameTick();
 		if (area == null) {
 			badGuy = new BadGuy(badGuyPoint);
-			area = new MapArea(MapArea.Map.ORIATH_DOCKS);
+			area = new MapArea(selectedMap);
 			mousePoint = new Point(getWidth() / 2, getHeight() / 2);
 			decimalFormat.setGroupingUsed(true);
 			decimalFormat.setGroupingSize(3);
