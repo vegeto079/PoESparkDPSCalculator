@@ -13,6 +13,7 @@ Path of Exile Spark DPS Calculator
 
 ## Notes
 * Each Spark projectile in a single cast can only hit once every 0.66s. This is indicated by all of the projectiles within that cast turning Red whenever they hit.
+* Spark projectiles pick a random direction to move in after hitting a wall. I am not sure how exactly PoE implements this, so there is likely large variance with this factor.
 
 ## Examples
 ![Gif of application running](https://i.imgur.com/RiPcg9a.gif)
