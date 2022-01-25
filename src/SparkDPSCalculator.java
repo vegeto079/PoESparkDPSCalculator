@@ -11,6 +11,19 @@ import com.github.vegeto079.ngcommontools.main.Tools;
 
 public class SparkDPSCalculator extends Game {
 	private static final long serialVersionUID = 3419048634045147821L;
+	
+	// ****************
+	// Variables below to change
+	double castRate = 7.7;
+	int proj = 12;
+	int pierce = 1;
+	int fork = 0;
+	int duration = 5740;
+	int damagePerHit = 655652;
+	
+	double sparkSpeed = 4.2;
+	double sparkSize = 25;
+	// ****************
 
 	public SparkDPSCalculator(Logger logger, String[] args, int ticksPerSecond, int paintTicksPerSecond, String title,
 			int width, int height) {
@@ -26,19 +39,7 @@ public class SparkDPSCalculator extends Game {
 
 	ArrayList<Spark> sparks = new ArrayList<Spark>();
 
-	//double castRate = 47.7;
-	//int proj = 1200;
-	double castRate = 7.7;
-	int proj = 12;
-	// double castRate = 2;
-	// int proj = 3;
-
-	int pierce = 1;
-	int fork = 0;
-	int duration = 5740;
-
-	int defaultDamage = 655652;
-	double expectedDamage = 655652 * castRate;
+	double expectedDamage = damagePerHit * castRate;
 
 	int count = 0;
 	double MAX_COUNT = 100 / castRate;
@@ -239,15 +240,15 @@ public class SparkDPSCalculator extends Game {
 		Color color;
 		SparkParent parent;
 		int pierceLeft, forkLeft;
-		double damage = defaultDamage;
+		double damage = damagePerHit;
 
 		Spark(SparkParent parent) {
 			this.parent = parent;
 			x = parent.x;
 			y = parent.y;
-			size = 25;
+			size = sparkSize;
 			sizeView = 5;
-			speed = 4.2;
+			speed = sparkSpeed;
 			pierceLeft = pierce;
 			forkLeft = fork;
 			color = Color.BLUE;
