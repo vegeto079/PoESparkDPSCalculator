@@ -18,10 +18,10 @@ public class SparkDPSCalculator extends Game {
 	int proj = 12;
 	int pierce = 1;
 	int fork = 0;
-	int duration = 5740;
+	int duration = 5740; // milliseconds
 	int damagePerHit = 655652;
 	
-	double sparkSpeed = 4.2;
+	double sparkSpeed = 4.2; // How many pixels the Spark moves per-tick. I set this arbitrarily
 	double sparkSize = 25;
 	// ****************
 
