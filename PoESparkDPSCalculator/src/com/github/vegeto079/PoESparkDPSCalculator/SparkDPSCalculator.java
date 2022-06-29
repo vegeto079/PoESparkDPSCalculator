@@ -70,7 +70,7 @@ public class SparkDPSCalculator extends Game {
 			if (mousePoint != null)
 				g.drawOval(mousePoint.x - 10, mousePoint.y - 10, 20, 20);
 			area.draw(g);
-			badGuy.draw(g);
+			if(badGuy != null) badGuy.draw(g);
 
 			synchronized (sparks) {
 				for (Spark s : sparks)
@@ -109,7 +109,7 @@ public class SparkDPSCalculator extends Game {
 			decimalFormat2.setGroupingSize(3);
 			loadedMap = options.selectedMap;
 		}
-		badGuy = createBadGuy(badGuyPoint);
+		if (badGuy == null) badGuy = createBadGuy(badGuyPoint);
 		if (shootNow) {
 			count++;
 			if (count >= maxSparks) {
@@ -178,15 +178,21 @@ public class SparkDPSCalculator extends Game {
 	void mouseUnaction() {
 		// mousePoint = null;
 	}
-
-	@Override
-	public void mouseDragged(int x, int y, int button, int xOrigin, int yOrigin) {
+	
+	void mouseAction(int x, int y, int button) {
 		if (button == 1) // Left Click
 			mouseAction(x, y);
 		else if (button == 2)
 			shootNow = !shootNow;
-		else if (button == 3) // Right click
+		else if (button == 3) { // Right click
 			badGuyPoint = new Point(x, y);
+			badGuy = null;
+		}
+	}
+
+	@Override
+	public void mouseDragged(int x, int y, int button, int xOrigin, int yOrigin) {
+		mouseAction(x, y, button);
 	}
 
 	@Override
@@ -200,12 +206,7 @@ public class SparkDPSCalculator extends Game {
 
 	@Override
 	public void mousePressed(int x, int y, int button) {
-		if (button == 1) // Left Click
-			mouseAction(x, y);
-		else if (button == 2)
-			shootNow = !shootNow;
-		else if (button == 3) // Right click
-			badGuyPoint = new Point(x, y);
+		mouseAction(x, y, button);
 	}
 
 	@Override
@@ -300,7 +301,7 @@ public class SparkDPSCalculator extends Game {
 			double maxX = newX + size / 2;
 			double maxY = newY + size / 2;
 
-			if (canHit() && (badGuy.contains(minX, minY) || badGuy.contains(maxX, minY) || badGuy.contains(minX, maxY)
+			if (canHit() && badGuy != null && (badGuy.contains(minX, minY) || badGuy.contains(maxX, minY) || badGuy.contains(minX, maxY)
 					|| badGuy.contains(maxX, maxY))) {
 				hit();
 			}
