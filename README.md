@@ -17,10 +17,10 @@ It is notoriously difficult to calculate Spark's actual DPS and hits-per-second.
 * Spark projectiles pick a random direction to move in after hitting a wall. I am not sure how exactly PoE implements this, so there is likely large variance with this factor.
 
 ## Examples
-![Gif of application running](https://i.imgur.com/RiPcg9a.gif)
-![Picture of application](https://i.imgur.com/3YsKSww.png)
+![Animated gif of application running](https://i.imgur.com/RiPcg9a.gif)
+![Image of application](https://i.imgur.com/3YsKSww.png)
 
-![Picture of settings at defaults](https://user-images.githubusercontent.com/24538801/176362788-2f34bc4e-a097-458f-985e-89150f42bc3d.png)
+![Image of settings menu](https://user-images.githubusercontent.com/24538801/176362788-2f34bc4e-a097-458f-985e-89150f42bc3d.png)
 
 Go Crazy!
 
