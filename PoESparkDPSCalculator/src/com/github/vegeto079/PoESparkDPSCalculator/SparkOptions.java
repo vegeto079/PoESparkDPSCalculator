@@ -92,7 +92,7 @@ public class SparkOptions extends JFrame {
     }
     
     public void addProjectileField(JPanel panel) {
-        JLabel label = new JLabel("Projectiles: ");
+        JLabel label = new JLabel("Number of Projectiles: ");
         JTextField textField = new JTextField("" + proj);
         textField.setPreferredSize(FIELD_SIZE);
         panel.add(label);
@@ -111,7 +111,7 @@ public class SparkOptions extends JFrame {
     }
     
     public void addPierceField(JPanel panel) {
-        JLabel label = new JLabel("Pierce: ");
+        JLabel label = new JLabel("Pierce Count: ");
         JTextField textField = new JTextField("" + pierce);
         textField.setPreferredSize(FIELD_SIZE);
         panel.add(label);
@@ -130,7 +130,7 @@ public class SparkOptions extends JFrame {
     }
     
     public void addForkField(JPanel panel) {
-        JLabel label = new JLabel("Fork: ");
+        JLabel label = new JLabel("Fork Count: ");
         JTextField textField = new JTextField("" + fork);
         textField.setPreferredSize(FIELD_SIZE);
         panel.add(label);
@@ -149,7 +149,7 @@ public class SparkOptions extends JFrame {
     }
     
     public void addDurationField(JPanel panel) {
-        JLabel label = new JLabel("Duration: ");
+        JLabel label = new JLabel("Duration (in milliseconds): ");
         JTextField textField = new JTextField("" + duration);
         textField.setPreferredSize(FIELD_SIZE);
         panel.add(label);
@@ -168,7 +168,7 @@ public class SparkOptions extends JFrame {
     }
     
     public void addDamageField(JPanel panel) {
-        JLabel label = new JLabel("Damage Per Hit: ");
+        JLabel label = new JLabel("Damage Per Spark Hit: ");
         JTextField textField = new JTextField("" + damagePerHit);
         textField.setPreferredSize(FIELD_SIZE);
         panel.add(label);
