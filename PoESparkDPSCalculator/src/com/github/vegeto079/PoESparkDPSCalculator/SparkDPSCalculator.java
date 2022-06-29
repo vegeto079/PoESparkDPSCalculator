@@ -2,13 +2,13 @@ package com.github.vegeto079.PoESparkDPSCalculator;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Polygon;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
-import com.github.vegeto079.PoESparkDPSCalculator.SparkDPSCalculator.MapArea.Map;
+import com.github.vegeto079.PoESparkDPSCalculator.areas.Area;
+import com.github.vegeto079.PoESparkDPSCalculator.areas.PathOfExileMap;
 import com.github.vegeto079.ngcommontools.main.Game;
 import com.github.vegeto079.ngcommontools.main.Logger;
 import com.github.vegeto079.ngcommontools.main.Tools;
@@ -38,10 +38,10 @@ public class SparkDPSCalculator extends Game {
 
 	int count = 0;
 	double maxSparks = 1;
-	MapArea area = null;
-	BadGuy badGuy = null;
+	Area area = null;
+	Area badGuy = null;
 	Point badGuyPoint = new Point(600, 600);
-	Map loadedMap = null;
+	PathOfExileMap loadedMap = null;
 
 	long start = System.currentTimeMillis();
 	ArrayList<Hit> hits = new ArrayList<Hit>();
@@ -100,8 +100,8 @@ public class SparkDPSCalculator extends Game {
 		maxSparks = 100 / options.castRate;
 		if (area == null || loadedMap != options.selectedMap) {
 			sparks.clear();
-			badGuy = new BadGuy(badGuyPoint);
-			area = new MapArea(options.selectedMap);
+			badGuy = createBadGuy(badGuyPoint);
+			area = createAreaByMap(options.selectedMap);
 			mousePoint = new Point(getWidth() / 2, getHeight() / 2);
 			decimalFormat.setGroupingUsed(true);
 			decimalFormat.setGroupingSize(3);
@@ -109,7 +109,7 @@ public class SparkDPSCalculator extends Game {
 			decimalFormat2.setGroupingSize(3);
 			loadedMap = options.selectedMap;
 		}
-		badGuy = new BadGuy(badGuyPoint);
+		badGuy = createBadGuy(badGuyPoint);
 		if (shootNow) {
 			count++;
 			if (count >= maxSparks) {
@@ -246,7 +246,7 @@ public class SparkDPSCalculator extends Game {
 		}
 	}
 
-	class Spark {
+	public class Spark {
 		double speed, x, y, angle, size, sizeView;
 		Color color;
 		SparkParent parent;
@@ -319,7 +319,7 @@ public class SparkDPSCalculator extends Game {
 			angle = Tools.random(dps, 0, 360, "Spark Angle");
 		}
 
-		Point getPoint() {
+		public Point getPoint() {
 			return new Point((int) x, (int) y);
 		}
 
@@ -358,75 +358,39 @@ public class SparkDPSCalculator extends Game {
 		}
 	}
 
-	static class MapArea extends Area {
-		enum Map {
-			ORIATH_DOCKS, SQUARE;
+	public Area createAreaByMap(PathOfExileMap map) {
+		Area area = new Area();
+		switch (map) {
+		case ORIATH_DOCKS:
+			area.addPoint(-1500, 310);
+			area.addPoint(dps.getWidth() - 300, 310);
+			area.addPoint(dps.getWidth() - 300, -200);
+			area.addPoint(dps.getWidth() - 100, -200);
+			area.addPoint(dps.getWidth() - 100, dps.getHeight() + 300);
+			area.addPoint(dps.getWidth() - 300, dps.getHeight() + 300);
+			area.addPoint(dps.getWidth() - 300, 450);
+			area.addPoint(-1500, 450);
+			break;
+		case SQUARE:
+			area.addPoint(20, 20);
+			area.addPoint(20, dps.getHeight() - 20);
+			area.addPoint(dps.getWidth() - 20, dps.getHeight() - 20);
+			area.addPoint(dps.getWidth() - 20, 20);
+			break;
 		}
-
-		MapArea(Map map) {
-			switch (map) {
-			case ORIATH_DOCKS:
-				addPoint(-1500, 310);
-				addPoint(dps.getWidth() - 300, 310);
-				addPoint(dps.getWidth() - 300, -200);
-				addPoint(dps.getWidth() - 100, -200);
-				addPoint(dps.getWidth() - 100, dps.getHeight() + 300);
-				addPoint(dps.getWidth() - 300, dps.getHeight() + 300);
-				addPoint(dps.getWidth() - 300, 450);
-				addPoint(-1500, 450);
-				break;
-			case SQUARE:
-				addPoint(20, 20);
-				addPoint(20, dps.getHeight() - 20);
-				addPoint(dps.getWidth() - 20, dps.getHeight() - 20);
-				addPoint(dps.getWidth() - 20, 20);
-				break;
-			}
-		}
+		return area;
 	}
-
-	static class BadGuy extends Area {
-		BadGuy(Point startLocation) {
-			int startX = startLocation.x;
-			int startY = startLocation.y;
-			int size = 50;
-			addPoint(startX - size / 2, startY - size / 2);
-			addPoint(startX - size / 2, startY + size / 2);
-			addPoint(startX + size / 2, startY + size / 2);
-			addPoint(startX + size / 2, startY - size / 2);
-			color = Color.GREEN;
-		}
-	}
-
-	static class Area {
-		Polygon polygon = new Polygon();
-		Color color;
-
-		void addPoint(int x, int y) {
-			polygon.addPoint(x, y);
-		}
-
-		void addPoint(Point p) {
-			addPoint(p.x, p.y);
-		}
-
-		void draw(Graphics2D g) {
-			Color before = g.getColor();
-			g.setColor(color);
-			g.draw(polygon);
-			g.setColor(before);
-		}
-
-		boolean contains(Spark spark) {
-			return polygon.contains(spark.getPoint());
-		}
-
-		boolean contains(Point p) {
-			return polygon.contains(p);
-		}
-
-		boolean contains(double x, double y) {
-			return polygon.contains(new Point((int) x, (int) y));
-		}
+	
+	public Area createBadGuy(Point startLocation) {
+		Area area = new Area();
+		int startX = startLocation.x;
+		int startY = startLocation.y;
+		int size = 50;
+		area.addPoint(startX - size / 2, startY - size / 2);
+		area.addPoint(startX - size / 2, startY + size / 2);
+		area.addPoint(startX + size / 2, startY + size / 2);
+		area.addPoint(startX + size / 2, startY - size / 2);
+		area.setColor(Color.GREEN);
+		return area;
 	}
 }

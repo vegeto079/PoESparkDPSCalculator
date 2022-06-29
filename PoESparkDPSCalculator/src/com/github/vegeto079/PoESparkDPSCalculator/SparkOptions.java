@@ -17,7 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import com.github.vegeto079.PoESparkDPSCalculator.SparkDPSCalculator.MapArea;
+import com.github.vegeto079.PoESparkDPSCalculator.areas.PathOfExileMap;
 
 public class SparkOptions extends JFrame {
 
@@ -34,7 +34,7 @@ public class SparkOptions extends JFrame {
 	public double sparkSize = 25;
 	
 	public long timeToAverageBy = 6000;
-	public MapArea.Map selectedMap = MapArea.Map.ORIATH_DOCKS; // ORIATH_DOCKS, SQUARE
+	public PathOfExileMap selectedMap = PathOfExileMap.ORIATH_DOCKS;
 	
 	private final static Dimension FIELD_SIZE = new Dimension(150, 20);
 	
@@ -226,7 +226,7 @@ public class SparkOptions extends JFrame {
     
     public void addMapField(JPanel panel) {
         JLabel label = new JLabel("Map: ");
-        JComboBox<String> comboBox = new JComboBox<String>(getEnumNames(MapArea.Map.class));
+        JComboBox<String> comboBox = new JComboBox<String>(getEnumNames(PathOfExileMap.class));
         comboBox.setPreferredSize(FIELD_SIZE);
         panel.add(label);
         panel.add(comboBox);
@@ -238,7 +238,7 @@ public class SparkOptions extends JFrame {
                 try {
                 	String selectedItem = (String) comboBox.getSelectedItem();
                 	if(selectedItem != null) {
-                		selectedMap = MapArea.Map.valueOf(selectedItem);
+                		selectedMap = PathOfExileMap.valueOf(selectedItem);
                 	}
                 } catch(NumberFormatException nfe) {
                 	// ignore bad input
