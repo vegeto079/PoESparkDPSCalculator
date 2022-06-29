@@ -79,7 +79,7 @@ public class SparkDPSCalculator extends Game {
 			if (done < 0) {
 				start = System.currentTimeMillis();
 			}
-			g.drawString("time left (for averaging): " + done + ", fps: " + this.getFps() + ", ups: " + this.getUps(), 25, y += 20);
+			g.drawString("fps: " + this.getFps() + ", ups: " + this.getUps(), 25, y += 20);
 			g.drawString("castRate: " + options.castRate + ", projectiles: " + options.proj, 25, y += 40);
 			g.drawString("pierce: " + options.pierce + ", fork: " + options.fork, 25, y += 20);
 			g.drawString("duration: " + options.duration, 25, y += 20);
