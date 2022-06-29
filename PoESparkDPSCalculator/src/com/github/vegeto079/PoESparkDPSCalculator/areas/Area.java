@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 
-import com.github.vegeto079.PoESparkDPSCalculator.SparkDPSCalculator.Spark;
+import com.github.vegeto079.PoESparkDPSCalculator.objects.Spark;
 
 public class Area {
 	private Polygon polygon = new Polygon();
