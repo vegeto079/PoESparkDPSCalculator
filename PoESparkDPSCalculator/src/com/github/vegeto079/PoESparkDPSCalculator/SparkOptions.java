@@ -43,7 +43,7 @@ public class SparkOptions extends JFrame {
     }
 
     protected void initComponents() {
-		Dimension size = new Dimension(300, 500);
+		Dimension size = new Dimension(300, 400);
 
 		setPreferredSize(size);
 		setMinimumSize(size);
