@@ -6,6 +6,9 @@ import java.awt.Polygon;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
+
+import com.github.vegeto079.PoESparkDPSCalculator.SparkDPSCalculator.MapArea.Map;
 import com.github.vegeto079.ngcommontools.main.Game;
 import com.github.vegeto079.ngcommontools.main.Logger;
 import com.github.vegeto079.ngcommontools.main.Tools;
@@ -13,25 +16,13 @@ import com.github.vegeto079.ngcommontools.main.Tools;
 public class SparkDPSCalculator extends Game {
 	private static final long serialVersionUID = 3419048634045147821L;
 	
-	// ****************
-	// Variables below to change
-	double castRate = 5;
-	int proj = 10;
-	int pierce = 1;
-	int fork = 0;
-	int duration = 3000; // milliseconds
-	int damagePerHit = 655652;
-	
-	double sparkSpeed = 3; // How many pixels the Spark moves per-tick. I set this arbitrarily
-	double sparkSize = 25;
-	
-	long timeToAverageBy = 6000;
-	MapArea.Map selectedMap = MapArea.Map.ORIATH_DOCKS; // ORIATH_DOCKS, SQUARE
-	// ****************
+	private SparkOptions options = new SparkOptions();
 
 	public SparkDPSCalculator(Logger logger, String[] args, int ticksPerSecond, int paintTicksPerSecond, String title,
 			int width, int height) {
 		super(logger, args, ticksPerSecond, paintTicksPerSecond, title, width, height);
+		
+        SwingUtilities.invokeLater(() -> options.setVisible(true));
 	}
 
 	static SparkDPSCalculator dps = null;
@@ -43,13 +34,14 @@ public class SparkDPSCalculator extends Game {
 
 	ArrayList<Spark> sparks = new ArrayList<Spark>();
 
-	double expectedDamage = damagePerHit * castRate;
+	double expectedDamage = 0;
 
 	int count = 0;
-	double MAX_COUNT = 100 / castRate;
+	double maxSparks = 1;
 	MapArea area = null;
 	BadGuy badGuy = null;
 	Point badGuyPoint = new Point(600, 600);
+	Map loadedMap = null;
 
 	long start = System.currentTimeMillis();
 	ArrayList<Hit> hits = new ArrayList<Hit>();
@@ -59,7 +51,8 @@ public class SparkDPSCalculator extends Game {
 	DecimalFormat decimalFormat2 = new DecimalFormat("#.#");
 	boolean shootNow = true;
 	
-	int sparkLoopPrevention = 50; // If a Spark hits a wall more than this many times, kill it. It's probably stuck in a wall
+	final int sparkLoopPrevention = 50; // If a Spark hits a wall more than this many times, kill it. It's probably stuck in a wall
+	final long sparkHitTimeout = 660; // If a Spark hits an enemy, all Sparks in that cast cannot hit for 0.66s
 
 	class Hit {
 		long time = System.currentTimeMillis();
@@ -89,34 +82,38 @@ public class SparkDPSCalculator extends Game {
 			g.drawString("dps: " + decimalFormat.format(avgDamagePerSecond), 25, y += 20);
 			g.drawString("effectiveness: " + decimalFormat2.format(avgDamagePerSecond / expectedDamage * 100) + "%", 25,
 					y += 20);
-			long done = start + timeToAverageBy - System.currentTimeMillis();
+			long done = start + options.timeToAverageBy - System.currentTimeMillis();
 			if (done < 0) {
 				start = System.currentTimeMillis();
 			}
 			g.drawString("time left (for averaging): " + done + ", fps: " + this.getFps() + ", ups: " + this.getUps(), 25, y += 20);
-			g.drawString("castRate: " + castRate + ", projectiles: " + proj, 25, y += 40);
-			g.drawString("pierce: " + pierce + ", fork: " + fork, 25, y += 20);
-			g.drawString("duration: " + duration, 25, y += 20);
+			g.drawString("castRate: " + options.castRate + ", projectiles: " + options.proj, 25, y += 40);
+			g.drawString("pierce: " + options.pierce + ", fork: " + options.fork, 25, y += 20);
+			g.drawString("duration: " + options.duration, 25, y += 20);
 		}
 	}
 
 	@Override
 	public void gameTick() {
 		super.gameTick();
-		if (area == null) {
+		expectedDamage = options.damagePerHit * options.castRate;
+		maxSparks = 100 / options.castRate;
+		if (area == null || loadedMap != options.selectedMap) {
+			sparks.clear();
 			badGuy = new BadGuy(badGuyPoint);
-			area = new MapArea(selectedMap);
+			area = new MapArea(options.selectedMap);
 			mousePoint = new Point(getWidth() / 2, getHeight() / 2);
 			decimalFormat.setGroupingUsed(true);
 			decimalFormat.setGroupingSize(3);
 			decimalFormat2.setGroupingUsed(true);
 			decimalFormat2.setGroupingSize(3);
+			loadedMap = options.selectedMap;
 		}
 		badGuy = new BadGuy(badGuyPoint);
 		if (shootNow) {
 			count++;
-			if (count >= MAX_COUNT) {
-				addSparks(proj);
+			if (count >= maxSparks) {
+				addSparks(options.proj);
 				count = 0;
 			}
 		}
@@ -133,7 +130,7 @@ public class SparkDPSCalculator extends Game {
 				double newAvgHitsPerSecond = 0;
 				double newAvgDpsPerSecond = 0;
 				for (int i = 0; i < hits.size(); i++) {
-					if (hits.get(i).time + timeToAverageBy <= System.currentTimeMillis()) {
+					if (hits.get(i).time + options.timeToAverageBy <= System.currentTimeMillis()) {
 						hits.remove(i);
 						i--;
 					} else {
@@ -142,12 +139,12 @@ public class SparkDPSCalculator extends Game {
 					}
 				}
 				try {
-					avgHitsPerSecond = newAvgHitsPerSecond / ((double) timeToAverageBy / 1000d);
+					avgHitsPerSecond = newAvgHitsPerSecond / ((double) options.timeToAverageBy / 1000d);
 				} catch (Exception e) {
 					avgHitsPerSecond = 0;
 				}
 				try {
-					avgDamagePerSecond = newAvgDpsPerSecond / ((double) timeToAverageBy / 1000d);
+					avgDamagePerSecond = newAvgDpsPerSecond / ((double) options.timeToAverageBy / 1000d);
 				} catch (Exception e) {
 					avgDamagePerSecond = 0;
 				}
@@ -234,11 +231,11 @@ public class SparkDPSCalculator extends Game {
 		SparkParent(Point p) {
 			x = p.x;
 			y = p.y;
-			death = System.currentTimeMillis() + duration;
+			death = System.currentTimeMillis() + options.duration;
 		}
 
 		boolean canHit() {
-			return lastHit + 600 <= System.currentTimeMillis();
+			return lastHit + sparkHitTimeout <= System.currentTimeMillis();
 		}
 
 		void hit(double damage) {
@@ -254,17 +251,17 @@ public class SparkDPSCalculator extends Game {
 		Color color;
 		SparkParent parent;
 		int pierceLeft, forkLeft;
-		double damage = damagePerHit;
+		double damage = options.damagePerHit;
 
 		Spark(SparkParent parent) {
 			this.parent = parent;
 			x = parent.x;
 			y = parent.y;
-			size = sparkSize;
+			size = options.sparkSize;
 			sizeView = 5;
-			speed = sparkSpeed;
-			pierceLeft = pierce;
-			forkLeft = fork;
+			speed = options.sparkSpeed;
+			pierceLeft = options.pierce;
+			forkLeft = options.fork;
 			color = Color.BLUE;
 		}
 
